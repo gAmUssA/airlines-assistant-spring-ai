@@ -7,54 +7,93 @@
     ":separatePatchReleases"
   ],
   "timezone": "Europe/Berlin",
-  "schedule": ["before 6am on monday"],
-  "labels": ["dependencies"],
-  "assignees": ["@me"],
-  "reviewers": ["@me"],
+  "schedule": [
+    "before 6am on monday"
+  ],
+  "labels": [
+    "dependencies"
+  ],
+  "assignees": [
+    "@me"
+  ],
+  "reviewers": [
+    "@me"
+  ],
   "packageRules": [
     {
       "description": "Group Spring Boot and Spring AI updates",
       "groupName": "Spring Framework",
-      "matchPackagePatterns": [
-        "^org\\.springframework",
-        "^org\\.springframework\\.boot",
-        "^org\\.springframework\\.ai"
+      "schedule": [
+        "before 6am on monday"
       ],
-      "schedule": ["before 6am on monday"],
-      "labels": ["spring-framework", "dependencies"]
+      "labels": [
+        "spring-framework",
+        "dependencies"
+      ],
+      "matchPackageNames": [
+        "/^org\\.springframework/",
+        "/^org\\.springframework\\.boot/",
+        "/^org\\.springframework\\.ai/"
+      ]
     },
     {
       "description": "Group Gradle updates",
       "groupName": "Gradle",
-      "matchManagers": ["gradle-wrapper", "gradle"],
-      "schedule": ["before 6am on monday"],
-      "labels": ["gradle", "dependencies"]
+      "matchManagers": [
+        "gradle-wrapper",
+        "gradle"
+      ],
+      "schedule": [
+        "before 6am on monday"
+      ],
+      "labels": [
+        "gradle",
+        "dependencies"
+      ]
     },
     {
       "description": "Group GitHub Actions updates",
       "groupName": "GitHub Actions",
-      "matchManagers": ["github-actions"],
-      "schedule": ["before 6am on monday"],
-      "labels": ["github-actions", "dependencies"]
+      "matchManagers": [
+        "github-actions"
+      ],
+      "schedule": [
+        "before 6am on monday"
+      ],
+      "labels": [
+        "github-actions",
+        "dependencies"
+      ]
     },
     {
       "description": "Auto-merge patch updates for non-Spring dependencies",
-      "matchUpdateTypes": ["patch"],
-      "excludePackagePatterns": [
-        "^org\\.springframework",
-        "^org\\.springframework\\.boot",
-        "^org\\.springframework\\.ai"
+      "matchUpdateTypes": [
+        "patch"
       ],
       "automerge": true,
       "automergeType": "pr",
-      "platformAutomerge": true
+      "platformAutomerge": true,
+      "matchPackageNames": [
+        "!/^org\\.springframework/",
+        "!/^org\\.springframework\\.boot/",
+        "!/^org\\.springframework\\.ai/"
+      ]
     },
     {
       "description": "Separate major updates for careful review",
-      "matchUpdateTypes": ["major"],
-      "labels": ["major-update", "dependencies"],
-      "reviewers": ["@me"],
-      "schedule": ["before 6am on monday"]
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "labels": [
+        "major-update",
+        "dependencies"
+      ],
+      "reviewers": [
+        "@me"
+      ],
+      "schedule": [
+        "before 6am on monday"
+      ]
     }
   ],
   "gradle": {
@@ -70,7 +109,9 @@
     {
       "customType": "regex",
       "description": "Update Spring AI version in build.gradle.kts",
-      "fileMatch": ["build\\.gradle\\.kts$"],
+      "managerFilePatterns": [
+        "/build\\.gradle\\.kts$/"
+      ],
       "matchStrings": [
         "extra\\[\"springAiVersion\"\\]\\s*=\\s*\"(?<currentValue>.*?)\""
       ],
@@ -80,7 +121,10 @@
   ],
   "vulnerabilityAlerts": {
     "enabled": true,
-    "labels": ["security", "vulnerability"]
+    "labels": [
+      "security",
+      "vulnerability"
+    ]
   },
   "osvVulnerabilityAlerts": true
 }
