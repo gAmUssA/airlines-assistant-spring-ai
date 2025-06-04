@@ -1,0 +1,75 @@
+name: 🧪 CI - Build & Test
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  smoke-test:
+    name: 🔥 Smoke Test
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: ☕ Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+        
+    - name: 🐘 Setup Gradle
+      uses: gradle/actions/setup-gradle@v4
+      with:
+        gradle-version: wrapper
+        
+    - name: 🔍 Validate Gradle wrapper
+      uses: gradle/actions/wrapper-validation@v4
+      
+    - name: 🏗️ Build project
+      run: ./gradlew build --no-daemon
+      
+    - name: 🧪 Run tests
+      run: ./gradlew test --no-daemon
+      
+    - name: 📊 Upload test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: test-results
+        path: build/reports/tests/test/
+        
+    - name: 📈 Upload build reports
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: build-reports
+        path: build/reports/
+
+  dependency-check:
+    name: 🔒 Security Scan
+    runs-on: ubuntu-latest
+    needs: smoke-test
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: ☕ Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+        
+    - name: 🔍 Run dependency check
+      run: ./gradlew dependencyCheckAnalyze --no-daemon || true
+      
+    - name: 📋 Upload security report
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: security-report
+        path: build/reports/

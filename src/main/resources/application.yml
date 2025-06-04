@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: airlines-assistant-spring-ai
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY:your-api-key-here}
+      chat:
+        options:
+          model: gpt-4o-mini
+          temperature: 0.7
+          max-tokens: 1000
+      embedding:
+        options:
+          model: text-embedding-3-small
+
+server:
+  port: 9080
+
+logging:
+  level:
+    com.airline.assistant: DEBUG
+    org.springframework.ai: DEBUG

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Airline Loyalty Assistant</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <div class="logo-icon">✈️</div>
+                <h1>Airline Loyalty Assistant</h1>
+            </div>
+            <p class="subtitle">Your AI-powered guide to maximizing airline loyalty benefits</p>
+        </header>
+
+        <main class="chat-container">
+            <div class="chat-messages" id="chatMessages">
+                <div class="message assistant-message">
+                    <div class="message-avatar">🤖</div>
+                    <div class="message-content">
+                        <p>Hello! I'm your airline loyalty assistant. I can help you with questions about Delta SkyMiles, United MileagePlus, and other loyalty programs. What would you like to know?</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-input-container">
+                <div class="input-wrapper">
+                    <textarea 
+                        id="messageInput" 
+                        placeholder="Ask me about airline loyalty programs..."
+                        rows="1"
+                        maxlength="1000"></textarea>
+                    <button id="sendButton" type="button" aria-label="Send message">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="22" y1="2" x2="11" y2="13"></line>
+                            <polygon points="22,2 15,22 11,13 2,9"></polygon>
+                        </svg>
+                    </button>
+                </div>
+                <div class="input-footer">
+                    <span class="character-count">0/1000</span>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>Powered by Spring AI • Demo Application</p>
+        </footer>
+    </div>
+
+    <div id="loadingIndicator" class="loading-indicator hidden">
+        <div class="loading-spinner"></div>
+        <span>Thinking...</span>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

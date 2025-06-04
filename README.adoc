@@ -1,0 +1,201 @@
+= ✈️ Airline Loyalty Assistant - Spring AI Demo
+:toc: auto
+:toc-placement: preamble
+:icons: font
+:source-highlighter: highlight.js
+
+image:https://img.shields.io/badge/Spring%20Boot-3.5.0-brightgreen.svg[Spring Boot]
+image:https://img.shields.io/badge/Spring%20AI-1.0.0-blue.svg[Spring AI]
+image:https://img.shields.io/badge/Java-21-orange.svg[Java]
+image:https://img.shields.io/badge/License-MIT-yellow.svg[License: MIT]
+
+A modern AI-powered airline loyalty assistant built with Spring AI 1.0.0, demonstrating conversational AI capabilities for travel and loyalty program assistance.
+
+== 🚀 Features
+
+* **AI-Powered Chat**: Intelligent responses using OpenAI GPT-4o-mini
+* **Airline Expertise**: Specialized knowledge of loyalty programs (Delta SkyMiles, United MileagePlus)
+* **Modern UI**: Responsive web interface with real-time chat
+* **Spring AI Integration**: Latest Spring AI 1.0.0 stable release
+* **Production Ready**: Built with Spring Boot best practices
+
+== 🏗️ Architecture
+
+* **Backend**: Spring Boot 3.5.0 with Spring AI
+* **Frontend**: Static HTML/CSS/JavaScript (no frameworks)
+* **AI Model**: OpenAI GPT-4o-mini via Spring AI
+* **Build**: Gradle with Kotlin DSL
+* **Java**: Version 21
+
+== 📋 Prerequisites
+
+* Java 21+
+* Gradle 8.5+ (or use included wrapper)
+* OpenAI API Key
+
+== ⚡ Quick Start
+
+=== 1. Clone and Setup
+
+[source,bash]
+----
+git clone <repository-url>
+cd airlines-assistant-spring-ai
+----
+
+=== 2. Configure Environment
+
+[source,bash]
+----
+# Copy environment template
+cp .env.template .env
+
+# Edit .env and add your OpenAI API key
+OPENAI_API_KEY=your-openai-api-key-here
+----
+
+=== 3. Run the Application
+
+[source,bash]
+----
+# Using Makefile (recommended)
+make run
+
+# Or using Gradle directly
+./gradlew bootRun
+----
+
+=== 4. Access the Application
+
+Open your browser and navigate to: http://localhost:9080
+
+== 🔧 Development Commands
+
+The project includes a colorful Makefile with emoji indicators:
+
+[source,bash]
+----
+make help        # 📋 Show available commands
+make build       # 🔨 Build the application
+make test        # 🧪 Run tests
+make run         # 🚀 Run the application
+make dev-run     # 🔧 Run with hot reload
+make env-check   # 🔍 Check environment setup
+make clean       # 🧹 Clean build artifacts
+----
+
+== 🏛️ Project Structure
+
+[source]
+----
+src/
+├── main/
+│   ├── java/com/airline/assistant/
+│   │   ├── AirlineAssistantApplication.java
+│   │   ├── config/
+│   │   │   └── AirlineAssistantConfig.java
+│   │   ├── controller/
+│   │   │   └── AirlineAssistantController.java
+│   │   └── service/
+│   │       └── AirlineAssistantService.java
+│   └── resources/
+│       ├── static/
+│       │   ├── index.html
+│       │   ├── styles.css
+│       │   └── app.js
+│       └── application.yml
+└── test/
+    └── java/com/airline/assistant/
+        └── AirlineAssistantApplicationTests.java
+----
+
+== 🔌 API Endpoints
+
+[cols="1,2,3"]
+|===
+|Method |Endpoint |Description
+
+|POST
+|`/api/chat`
+|Send chat message and receive AI response
+
+|GET
+|`/api/health`
+|Health check endpoint
+
+|GET
+|`/`
+|Serve static frontend
+|===
+
+== 🧪 Testing
+
+[source,bash]
+----
+# Run all tests
+make test
+
+# Run with coverage (future enhancement)
+./gradlew test jacocoTestReport
+----
+
+== 🚢 Deployment
+
+The application is containerized and can be deployed using:
+
+* Docker (configuration in future phases)
+* Cloud platforms (AWS, GCP, Azure)
+* Traditional application servers
+
+== 🗺️ Development Roadmap
+
+=== Phase 1: Foundation ✅
+* Basic chat functionality
+* OpenAI integration
+* Static frontend
+
+=== Phase 2: Memory (Planned)
+* Conversation history
+* Session management
+* Context preservation
+
+=== Phase 3: RAG (Planned)
+* Knowledge base integration
+* Document retrieval
+* Enhanced responses
+
+=== Phase 4: Tools (Planned)
+* Function calling
+* External API integration
+* Advanced capabilities
+
+=== Phase 5: Local Models (Planned)
+* Ollama integration
+* Local embedding models
+* Offline capabilities
+
+== 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests
+5. Submit a pull request
+
+== 📄 License
+
+This project is licensed under the MIT License - see the link:LICENSE[LICENSE] file for details.
+
+== 🙏 Acknowledgments
+
+* Spring AI Team for the excellent framework
+* OpenAI for the powerful language models
+* Spring Boot community for the solid foundation
+
+== 📞 Support
+
+For questions or issues:
+
+* Create an issue in this repository
+* Check the Spring AI documentation
+* Review the implementation plan in `docs/plan.md`

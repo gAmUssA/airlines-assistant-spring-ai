@@ -1,0 +1,86 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":dependencyDashboard",
+    ":semanticCommits",
+    ":separatePatchReleases"
+  ],
+  "timezone": "Europe/Berlin",
+  "schedule": ["before 6am on monday"],
+  "labels": ["dependencies"],
+  "assignees": ["@me"],
+  "reviewers": ["@me"],
+  "packageRules": [
+    {
+      "description": "Group Spring Boot and Spring AI updates",
+      "groupName": "Spring Framework",
+      "matchPackagePatterns": [
+        "^org\\.springframework",
+        "^org\\.springframework\\.boot",
+        "^org\\.springframework\\.ai"
+      ],
+      "schedule": ["before 6am on monday"],
+      "labels": ["spring-framework", "dependencies"]
+    },
+    {
+      "description": "Group Gradle updates",
+      "groupName": "Gradle",
+      "matchManagers": ["gradle-wrapper", "gradle"],
+      "schedule": ["before 6am on monday"],
+      "labels": ["gradle", "dependencies"]
+    },
+    {
+      "description": "Group GitHub Actions updates",
+      "groupName": "GitHub Actions",
+      "matchManagers": ["github-actions"],
+      "schedule": ["before 6am on monday"],
+      "labels": ["github-actions", "dependencies"]
+    },
+    {
+      "description": "Auto-merge patch updates for non-Spring dependencies",
+      "matchUpdateTypes": ["patch"],
+      "excludePackagePatterns": [
+        "^org\\.springframework",
+        "^org\\.springframework\\.boot",
+        "^org\\.springframework\\.ai"
+      ],
+      "automerge": true,
+      "automergeType": "pr",
+      "platformAutomerge": true
+    },
+    {
+      "description": "Separate major updates for careful review",
+      "matchUpdateTypes": ["major"],
+      "labels": ["major-update", "dependencies"],
+      "reviewers": ["@me"],
+      "schedule": ["before 6am on monday"]
+    }
+  ],
+  "gradle": {
+    "timeout": 600
+  },
+  "hostRules": [
+    {
+      "matchHost": "repo.spring.io",
+      "timeout": 60000
+    }
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Update Spring AI version in build.gradle.kts",
+      "fileMatch": ["build\\.gradle\\.kts$"],
+      "matchStrings": [
+        "extra\\[\"springAiVersion\"\\]\\s*=\\s*\"(?<currentValue>.*?)\""
+      ],
+      "datasourceTemplate": "maven",
+      "depNameTemplate": "org.springframework.ai:spring-ai-bom"
+    }
+  ],
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "labels": ["security", "vulnerability"]
+  },
+  "osvVulnerabilityAlerts": true
+}
