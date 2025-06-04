@@ -18,6 +18,16 @@ Spring AI-based Airline Loyalty Assistant demo application showcasing Spring AI 
 └── memory-bank/ (project memory system)
 ```
 
+## Repository Information
+- **GitHub Repository**: https://github.com/gAmUssA/airlines-assistant-spring-ai
+- **License**: MIT License
+- **Version Control**: Git with main branch
+- **CI/CD**: GitHub Actions with smoke testing
+- **Dependency Management**: Renovate bot configured
+- **Initial Commit**: 40e3441 - Complete Phase 1 Week 1 foundation
+
+[2025-06-05 01:22:30] - Repository created and initial codebase committed to GitHub
+
 ## Development Standards
 - Use Gradle with Kotlin for build scripts (per user preferences)
 - Docker Compose without version attribute for container management
