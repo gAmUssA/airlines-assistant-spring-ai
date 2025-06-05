@@ -160,11 +160,20 @@ This plan details the implementation of a Spring AI-based Airline Loyalty Assist
    - **Flight Status**: Add demonstration flight information lookup
    - **Points Calculator**: Create interactive earning/redemption calculators
 
-3. **Integration & Testing**
+3. **MCP Server Integration**
+   - **MCP Client Setup**: Add Model Context Protocol client dependencies
+   - **Server Configuration**: Create MCP server connection management
+   - **Tool Discovery**: Implement MCP tool discovery and registration
+   - **Airline Tools**: Create airline-specific MCP tools (flight status, booking lookup)
+   - **Health Monitoring**: Add MCP server health monitoring and error handling
+   - **Testing**: Test MCP tool execution and response handling
+
+4. **Integration & Testing**
    - Integrate tools with ChatClient function calling
    - Test tool execution and error handling
    - Validate user feedback on action completion
    - Create demonstration mode indicators
+   - Test MCP server connectivity and tool availability
 
 ### Phase 5: Local Model Support (Week 7)
 

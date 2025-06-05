@@ -141,22 +141,31 @@
 ### External Tool Implementation
 
 #### Tool Framework Setup
-- [ ] 6.1 Create `AirlineTools` component with @Tool annotations
-- [ ] 6.2 Configure function calling with ChatClient
+- [x] 6.1 Create `AirlineTools` component with @Tool annotations
+- [x] 6.2 Configure function calling with ChatClient
 - [ ] 6.3 Set up tool parameter validation and error handling
 - [ ] 6.4 Implement tool execution feedback mechanisms
 
 #### Specific Tool Implementations
-- [ ] 6.5 Create simulated SMS notification service
-- [ ] 6.6 Implement mock calendar integration
-- [ ] 6.7 Add demonstration flight information lookup
-- [ ] 6.8 Create interactive earning/redemption calculators
+- [x] 6.5 Create simulated SMS notification service
+- [x] 6.6 Implement mock calendar integration
+- [x] 6.7 Add demonstration flight information lookup
+- [x] 6.8 Create interactive earning/redemption calculators
+
+#### MCP Server Integration
+- [ ] 6.9 Add MCP (Model Context Protocol) client dependencies
+- [ ] 6.10 Create MCP server configuration and connection management
+- [ ] 6.11 Implement MCP tool discovery and registration
+- [ ] 6.12 Create airline-specific MCP tools (flight status, booking lookup)
+- [ ] 6.13 Add MCP server health monitoring and error handling
+- [ ] 6.14 Test MCP tool execution and response handling
 
 #### Integration & Testing
-- [ ] 6.9 Integrate tools with ChatClient function calling
-- [ ] 6.10 Test tool execution and error handling
-- [ ] 6.11 Validate user feedback on action completion
-- [ ] 6.12 Create demonstration mode indicators
+- [x] 6.15 Integrate tools with ChatClient function calling
+- [ ] 6.16 Test tool execution and error handling
+- [ ] 6.17 Validate user feedback on action completion
+- [ ] 6.18 Create demonstration mode indicators
+- [ ] 6.19 Test MCP server connectivity and tool availability
 
 ## Phase 5: Local Model Support (Week 7)
 
@@ -283,12 +292,12 @@
 ## Progress Tracking
 
 **Total Tasks**: 123
-**Completed**: 52
+**Completed**: 60
 **In Progress**: 0
-**Remaining**: 71
+**Remaining**: 63
 
-**Current Phase**: Phase 3 (RAG Implementation)
-**Next Milestone**: Complete Phase 3 and begin Phase 4
+**Current Phase**: Phase 4 (Tool Integration)
+**Next Milestone**: Complete Phase 4 and begin Phase 5
 
 ### Completion Summary ✅
 
@@ -304,6 +313,11 @@
 #### Phase 3 - RAG Implementation (100% Complete)
 - ✅ **Week 4**: Document Processing Pipeline (12 tasks)
 - ✅ **Week 5**: RAG Integration (12 tasks)
+
+#### Phase 4 - Tool Integration (50% Complete)
+- ✅ **External Tool Implementation**: Tool framework and specific tools (8 tasks)
+- [ ] **MCP Server Integration**: MCP client dependencies and server configuration (6 tasks)
+- [ ] **Integration & Testing**: Tool execution and error handling (5 tasks)
 
 #### Environment Setup (100% Complete)
 - ✅ **Prerequisites**: Development environment verification (5 tasks)
