@@ -1,0 +1,39 @@
+spring:
+  ai:
+    openai:
+      api-key: test-key
+      chat:
+        options:
+          model: gpt-4o-mini
+          temperature: 0.7
+  
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password: password
+  
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+
+  safeguard:
+    enabled: true
+    sensitivity-level: MEDIUM
+    filter-rules:
+      profanity:
+        enabled: true
+        words: ["damn", "hell", "crap", "stupid", "idiot", "moron", "dumb"]
+      inappropriate:
+        enabled: true
+        words: ["offensive", "rude", "disrespectful", "threatening", "abusive"]
+      policy-violation:
+        enabled: true
+        words: ["bomb", "weapon", "hijack", "terrorist", "violence", "drugs"]
+
+  logging:
+    level:
+      com.airline.assistant: DEBUG
+      org.springframework.ai: DEBUG
