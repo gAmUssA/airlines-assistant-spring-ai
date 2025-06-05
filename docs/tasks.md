@@ -123,11 +123,18 @@
 - [x] 5.7 Create fallback mechanisms when no relevant context found
 - [x] 5.8 Optimize retrieval performance for sub-2s response times
 
+#### User Data Integration
+- [x] 5.13 Create User entity and repository for PostgreSQL
+- [x] 5.14 Implement user introduction detection
+- [x] 5.15 Retrieve user data (loyalty number, status, preferred airport)
+- [x] 5.16 Augment prompts with user information
+
 #### Testing & Validation
 - [x] 5.9 Test RAG retrieval accuracy with airline loyalty questions
 - [x] 5.10 Validate SimpleVectorStore persistence across restarts
 - [x] 5.11 Performance test retrieval efficiency
 - [x] 5.12 Create comprehensive test cases for knowledge base queries
+- [x] 5.17 Test user introduction detection and data retrieval
 
 ## Phase 4: Tool Integration (Week 6)
 

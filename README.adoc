@@ -16,6 +16,7 @@ A modern AI-powered airline loyalty assistant built with Spring AI 1.0.0, demons
 * **AI-Powered Chat**: Intelligent responses using OpenAI GPT-4o-mini
 * **Airline Expertise**: Specialized knowledge of loyalty programs (Delta SkyMiles, United MileagePlus)
 * **RAG Implementation**: Retrieval-Augmented Generation for accurate loyalty program information
+* **User Data Integration**: Detects user introductions and retrieves personalized information from database
 * **RAG Testing Interface**: Dedicated page for testing knowledge base queries
 * **Modern UI**: Responsive web interface with real-time chat
 * **Spring AI Integration**: Latest Spring AI 1.0.0 stable release
@@ -34,6 +35,7 @@ A modern AI-powered airline loyalty assistant built with Spring AI 1.0.0, demons
 * Java 21+
 * Gradle 8.5+ (or use included wrapper)
 * OpenAI API Key
+* PostgreSQL 14+ (for user data storage)
 
 == ⚡ Quick Start
 
@@ -58,6 +60,8 @@ OPENAI_API_KEY=your-openai-api-key-here
 
 === 3. Run the Application
 
+==== Option A: Using Gradle
+
 [source,bash]
 ----
 # Using Makefile (recommended)
@@ -72,6 +76,24 @@ make run-with-memory
 # Or with increased memory settings
 JAVA_OPTS="-Xmx512m -Xms256m" ./gradlew bootRun
 ----
+
+==== Option B: Using Docker Compose for PostgreSQL
+
+[source,bash]
+----
+# Start the PostgreSQL database
+docker-compose up -d
+
+# To view logs
+docker-compose logs -f
+
+# To stop the database
+docker-compose down
+----
+
+NOTE: The Docker Compose setup only includes the PostgreSQL database. You'll need to run the application separately using Gradle as described in Option A.
+
+NOTE: The PostgreSQL database data will be persisted in a Docker volume. You can remove the volume with `docker-compose down -v` if you want to start with a fresh database.
 
 NOTE: If you encounter `OutOfMemoryError` issues, see the link:docs/memory-optimization.md[Memory Optimization Guide] for details.
 
@@ -116,16 +138,24 @@ src/
 │   ├── java/com/airline/assistant/
 │   │   ├── AirlineAssistantApplication.java
 │   │   ├── config/
-│   │   │   └── AirlineAssistantConfig.java
+│   │   │   ├── AirlineAssistantConfig.java
+│   │   │   └── DataInitializer.java
 │   │   ├── controller/
 │   │   │   ├── AirlineAssistantController.java
 │   │   │   └── KnowledgeBaseController.java
+│   │   ├── model/
+│   │   │   └── User.java
+│   │   ├── repository/
+│   │   │   └── UserRepository.java
 │   │   ├── rag/
 │   │   │   ├── AirlineDocument.java
 │   │   │   └── SimpleVectorStore.java
-│   │   └── service/
-│   │       ├── AirlineAssistantService.java
-│   │       └── KnowledgeBaseService.java
+│   │   ├── service/
+│   │   │   ├── AirlineAssistantService.java
+│   │   │   ├── KnowledgeBaseService.java
+│   │   │   └── UserService.java
+│   │   └── util/
+│   │       └── UserIntroductionDetector.java
 │   └── resources/
 │       ├── knowledge-base/
 │       │   ├── delta-skymiles.md
@@ -142,9 +172,12 @@ src/
 └── test/
     └── java/com/airline/assistant/
         ├── AirlineAssistantApplicationTests.java
-        └── service/
-            ├── AirlineAssistantServiceTest.java
-            └── KnowledgeBaseServiceTest.java
+        ├── service/
+        │   ├── AirlineAssistantServiceTest.java
+        │   ├── KnowledgeBaseServiceTest.java
+        │   └── UserServiceTest.java
+        └── util/
+            └── UserIntroductionDetectorTest.java
 ----
 
 == 🔌 API Endpoints
@@ -217,6 +250,8 @@ The application is containerized and can be deployed using:
 * Knowledge base integration
 * Document retrieval
 * Enhanced responses
+* User data integration
+* Personalized responses
 
 === Phase 4: Tools (Planned)
 * Function calling
