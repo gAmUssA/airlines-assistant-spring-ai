@@ -12,7 +12,7 @@ ifneq (,$(wildcard ./.env))
     export
 endif
 
-.PHONY: help build test run clean dev-run check format env-check docs ci-local
+.PHONY: help build test run run-with-memory clean dev-run check format env-check docs ci-local
 
 help: ## 📋 Show this help message
 	@echo "$(BLUE)🛫 Airline Assistant Spring AI$(NC)"
@@ -50,6 +50,15 @@ run: env-check ## 🚀 Run the application
 		exit 1; \
 	fi
 	./gradlew bootRun
+
+run-with-memory: env-check ## 🚀 Run the application with increased memory settings
+	@echo "$(BLUE)🚀 Starting application with increased memory settings on port 9080...$(NC)"
+	@if [ -z "$$OPENAI_API_KEY" ]; then \
+		echo "$(RED)❌ OPENAI_API_KEY not found! Please check your .env file$(NC)"; \
+		exit 1; \
+	fi
+	@echo "$(YELLOW)💡 Using JVM options: -Xmx512m -Xms256m$(NC)"
+	JAVA_OPTS="-Xmx512m -Xms256m" ./gradlew bootRun
 
 dev-run: env-check ## 🔧 Run in development mode with hot reload
 	@echo "$(BLUE)🔧 Starting in development mode on port 9080...$(NC)"

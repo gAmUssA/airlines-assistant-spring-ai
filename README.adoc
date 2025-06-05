@@ -15,6 +15,8 @@ A modern AI-powered airline loyalty assistant built with Spring AI 1.0.0, demons
 
 * **AI-Powered Chat**: Intelligent responses using OpenAI GPT-4o-mini
 * **Airline Expertise**: Specialized knowledge of loyalty programs (Delta SkyMiles, United MileagePlus)
+* **RAG Implementation**: Retrieval-Augmented Generation for accurate loyalty program information
+* **RAG Testing Interface**: Dedicated page for testing knowledge base queries
 * **Modern UI**: Responsive web interface with real-time chat
 * **Spring AI Integration**: Latest Spring AI 1.0.0 stable release
 * **Production Ready**: Built with Spring Boot best practices
@@ -61,13 +63,33 @@ OPENAI_API_KEY=your-openai-api-key-here
 # Using Makefile (recommended)
 make run
 
+# If you encounter memory issues, use the memory-optimized run command
+make run-with-memory
+
 # Or using Gradle directly
 ./gradlew bootRun
+
+# Or with increased memory settings
+JAVA_OPTS="-Xmx512m -Xms256m" ./gradlew bootRun
 ----
+
+NOTE: If you encounter `OutOfMemoryError` issues, see the link:docs/memory-optimization.md[Memory Optimization Guide] for details.
 
 === 4. Access the Application
 
 Open your browser and navigate to: http://localhost:9080
+
+==== Main Chat Interface
+The main page provides a chat interface where you can ask questions about airline loyalty programs. The AI will use RAG to enhance its responses with information from the knowledge base.
+
+==== RAG Testing Interface
+To directly test the RAG functionality, navigate to: http://localhost:9080/rag-tester.html
+
+This interface allows you to:
+- Query the knowledge base directly
+- See the raw documents that match your query
+- View the formatted context that would be sent to the AI
+- Adjust the number of results returned
 
 == 🔧 Development Commands
 
@@ -75,13 +97,14 @@ The project includes a colorful Makefile with emoji indicators:
 
 [source,bash]
 ----
-make help        # 📋 Show available commands
-make build       # 🔨 Build the application
-make test        # 🧪 Run tests
-make run         # 🚀 Run the application
-make dev-run     # 🔧 Run with hot reload
-make env-check   # 🔍 Check environment setup
-make clean       # 🧹 Clean build artifacts
+make help           # 📋 Show available commands
+make build          # 🔨 Build the application
+make test           # 🧪 Run tests
+make run            # 🚀 Run the application
+make run-with-memory # 🚀 Run with increased memory settings
+make dev-run        # 🔧 Run with hot reload
+make env-check      # 🔍 Check environment setup
+make clean          # 🧹 Clean build artifacts
 ----
 
 == 🏛️ Project Structure
@@ -95,18 +118,33 @@ src/
 │   │   ├── config/
 │   │   │   └── AirlineAssistantConfig.java
 │   │   ├── controller/
-│   │   │   └── AirlineAssistantController.java
+│   │   │   ├── AirlineAssistantController.java
+│   │   │   └── KnowledgeBaseController.java
+│   │   ├── rag/
+│   │   │   ├── AirlineDocument.java
+│   │   │   └── SimpleVectorStore.java
 │   │   └── service/
-│   │       └── AirlineAssistantService.java
+│   │       ├── AirlineAssistantService.java
+│   │       └── KnowledgeBaseService.java
 │   └── resources/
+│       ├── knowledge-base/
+│       │   ├── delta-skymiles.md
+│       │   ├── united-mileageplus.md
+│       │   └── README.md
 │       ├── static/
 │       │   ├── index.html
+│       │   ├── rag-tester.html
 │       │   ├── styles.css
-│       │   └── app.js
+│       │   ├── rag-tester.css
+│       │   ├── app.js
+│       │   └── rag-tester.js
 │       └── application.yml
 └── test/
     └── java/com/airline/assistant/
-        └── AirlineAssistantApplicationTests.java
+        ├── AirlineAssistantApplicationTests.java
+        └── service/
+            ├── AirlineAssistantServiceTest.java
+            └── KnowledgeBaseServiceTest.java
 ----
 
 == 🔌 API Endpoints
@@ -116,16 +154,32 @@ src/
 |Method |Endpoint |Description
 
 |POST
-|`/api/chat`
+|`/api/v1/chat`
 |Send chat message and receive AI response
 
+|DELETE
+|`/api/v1/chat/memory`
+|Clear conversation memory
+
+|POST
+|`/api/v1/knowledge/query`
+|Query the knowledge base directly
+
 |GET
-|`/api/health`
+|`/api/v1/knowledge/info`
+|Get information about the knowledge base
+
+|GET
+|`/api/v1/health`
 |Health check endpoint
 
 |GET
 |`/`
-|Serve static frontend
+|Serve main chat interface
+
+|GET
+|`/rag-tester.html`
+|Serve RAG testing interface
 |===
 
 == 🧪 Testing
@@ -154,12 +208,12 @@ The application is containerized and can be deployed using:
 * OpenAI integration
 * Static frontend
 
-=== Phase 2: Memory (Planned)
+=== Phase 2: Memory ✅
 * Conversation history
 * Session management
 * Context preservation
 
-=== Phase 3: RAG (Planned)
+=== Phase 3: RAG ✅
 * Knowledge base integration
 * Document retrieval
 * Enhanced responses

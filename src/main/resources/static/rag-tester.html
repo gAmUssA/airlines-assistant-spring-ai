@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAG Tester - Airline Loyalty Assistant</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="rag-tester.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <div class="logo-icon">✈️</div>
+                <h1>RAG Knowledge Base Tester</h1>
+            </div>
+            <p class="subtitle">Test queries against the airline loyalty program knowledge base</p>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">← Back to Chat</a>
+            </div>
+        </header>
+
+        <main class="rag-container">
+            <div class="query-section">
+                <h2>Query the Knowledge Base</h2>
+                <div class="input-wrapper">
+                    <textarea 
+                        id="queryInput" 
+                        placeholder="Enter your query about airline loyalty programs..."
+                        rows="3"
+                        maxlength="1000"></textarea>
+                    <div class="input-footer">
+                        <div class="limit-selector">
+                            <label for="resultLimit">Results:</label>
+                            <select id="resultLimit">
+                                <option value="3">3</option>
+                                <option value="5">5</option>
+                                <option value="10">10</option>
+                            </select>
+                        </div>
+                        <button id="queryButton" type="button">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                            Search
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="results-section">
+                <div class="results-tabs">
+                    <button class="tab-button active" data-tab="documents">Raw Documents</button>
+                    <button class="tab-button" data-tab="context">Formatted Context</button>
+                </div>
+                
+                <div class="tab-content" id="documentsTab">
+                    <div class="kb-info">
+                        <span id="documentCount">Loading knowledge base info...</span>
+                    </div>
+                    <div id="documentResults" class="document-results">
+                        <div class="placeholder-message">
+                            Enter a query to see matching documents from the knowledge base.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content hidden" id="contextTab">
+                    <div id="contextResult" class="context-result">
+                        <div class="placeholder-message">
+                            Enter a query to see the formatted context that would be sent to the AI.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>Powered by Spring AI • Demo Application</p>
+        </footer>
+    </div>
+
+    <div id="loadingIndicator" class="loading-indicator hidden">
+        <div class="loading-spinner"></div>
+        <span>Searching...</span>
+    </div>
+
+    <script src="rag-tester.js"></script>
+</body>
+</html>
