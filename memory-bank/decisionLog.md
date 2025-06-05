@@ -171,6 +171,30 @@
 
 ## Recent Decisions
 
+[2025-06-05 06:17:57] - **SafeGuardAdvisor Content Filtering Planning**
+- **Decision**: Add comprehensive content filtering capabilities via SafeGuardAdvisor component
+- **Rationale**: Ensure professional, safe, and appropriate interactions for airline customer service context
+- **Implementation Plan**:
+  - Create SafeGuardAdvisor implementing RequestResponseAdvisor interface
+  - Implement configurable filter rules (profanity, airline policy, professional tone)
+  - Add sensitivity levels (strict, moderate, lenient) with configuration
+  - Create content warning and alternative response generation
+  - Build admin interface for filter rule management
+  - Integrate with ChatClient advisor chain for both OpenAI and Ollama profiles
+- **Impact**: Enhanced safety and professionalism for customer interactions
+- **Tasks Added**: 11 new tasks (6.20-6.30) in Phase 4 with detailed implementation plan
+- **Status**: Planning complete, ready for implementation
+
+[2025-06-05 06:09:05] - **Local Model Switch: Llama3.1 to Mistral 7B**
+- **Decision**: Changed local model from llama3.1 to mistral:7b as originally planned
+- **Rationale**: Mistral 7B was the originally planned model in requirements and provides better performance for airline assistant tasks
+- **Implementation**:
+  - Updated application-local.yml model configuration to mistral:7b
+  - Added pull-mistral Makefile command for easy model downloading
+  - Updated app.model-name property to reflect mistral:7b
+- **Impact**: Local profile now uses Mistral 7B as intended in original design
+- **Status**: Configuration updated, model downloading in progress
+
 [2025-06-05 06:05:42] - **Phase 5 Local Model Support Implementation**
 - **Decision**: Implemented complete Ollama integration with profile-based switching between OpenAI and local models
 - **Rationale**: Provides offline capability and privacy benefits while maintaining cloud option for performance

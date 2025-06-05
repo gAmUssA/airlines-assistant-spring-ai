@@ -143,8 +143,8 @@
 #### Tool Framework Setup
 - [x] 6.1 Create `AirlineTools` component with @Tool annotations
 - [x] 6.2 Configure function calling with ChatClient
-- [ ] 6.3 Set up tool parameter validation and error handling
-- [ ] 6.4 Implement tool execution feedback mechanisms
+- [x] 6.3 Set up tool parameter validation and error handling
+- [x] 6.4 Implement tool execution feedback mechanisms
 
 #### Specific Tool Implementations
 - [x] 6.5 Create simulated SMS notification service
@@ -166,6 +166,24 @@
 - [ ] 6.17 Validate user feedback on action completion
 - [ ] 6.18 Create demonstration mode indicators
 - [ ] 6.19 Test MCP server connectivity and tool availability
+
+#### SafeGuard Advisor - Content Filtering
+- [x] 6.20 Create SafeGuardAdvisor component for content filtering
+- [x] 6.21 Implement basic profanity and inappropriate content detection
+- [x] 6.22 Add airline-specific content policy rules (professional tone, appropriate topics)
+- [x] 6.23 Configure content filtering for both input and output messages
+- [x] 6.24 Create configurable filter sensitivity levels (strict, moderate, lenient)
+- [x] 6.25 Implement content warning and alternative response generation
+- [x] 6.26 Add logging and monitoring for filtered content incidents
+- [x] 6.27 Create admin interface for content filter rule management
+- [ ] 6.28 Test content filtering with various input scenarios
+- [x] 6.29 Integrate SafeGuardAdvisor with ChatClient advisor chain
+- [ ] 6.30 Validate content filtering works with both OpenAI and Ollama profiles
+- [x] 6.31 Create /api/v1/chat/safe REST endpoint for filtered chat interactions
+- [x] 6.32 Implement frontend UI toggle system for safe mode switching
+- [x] 6.33 Add CSS styling and visual indicators for filter states
+- [x] 6.34 Create dual ChatClient configuration (safe vs regular)
+- [x] 6.35 Add filter status API endpoint and frontend integration
 
 ## Phase 5: Local Model Support (Week 7)
 
@@ -297,10 +315,10 @@
 
 ## Progress Tracking
 
-**Total Tasks**: 123
-**Completed**: 73
+**Total Tasks**: 139
+**Completed**: 83
 **In Progress**: 0
-**Remaining**: 50
+**Remaining**: 56
 
 **Current Phase**: Phase 5 (Local Model Support)
 **Next Milestone**: Complete Phase 5 and begin Phase 6
@@ -320,7 +338,7 @@
 - ✅ **Week 4**: Document Processing Pipeline (12 tasks)
 - ✅ **Week 5**: RAG Integration (12 tasks)
 
-#### Phase 4 - Tool Integration (50% Complete)
+#### Phase 4 - Tool Integration (60% Complete)
 - ✅ **External Tool Implementation**: Tool framework and specific tools (8 tasks)
 - [ ] **MCP Server Integration**: MCP client dependencies and server configuration (6 tasks)
 - [ ] **Integration & Testing**: Tool execution and error handling (5 tasks)

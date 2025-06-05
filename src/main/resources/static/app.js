@@ -8,6 +8,11 @@ class AirlineAssistant {
         this.characterCount = document.querySelector('.character-count');
         this.aiProviderStatus = document.getElementById('aiProviderStatus');
         
+        // Safe mode toggle elements
+        this.safeModeToggle = document.getElementById('safeModeToggle');
+        this.safeModeLabel = document.getElementById('safeModeLabel');
+        this.isSafeModeEnabled = false;
+        
         // User profile elements
         this.profileSidebar = document.getElementById('userProfileSidebar');
         this.profileToggleBtn = document.getElementById('profileToggleBtn');
@@ -49,6 +54,9 @@ class AirlineAssistant {
         
         // User search functionality
         this.userSearchInput.addEventListener('input', (e) => this.searchUsers(e.target.value));
+        
+        // Safe mode toggle
+        this.safeModeToggle.addEventListener('change', () => this.toggleSafeMode());
         
         // Initial character count
         this.updateCharacterCount();
@@ -102,7 +110,8 @@ class AirlineAssistant {
     }
 
     async callChatAPI(message) {
-        const response = await fetch('/api/v1/chat', {
+        const endpoint = this.isSafeModeEnabled ? '/api/v1/chat/safe' : '/api/v1/chat';
+        const response = await fetch(endpoint, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -405,6 +414,41 @@ class AirlineAssistant {
             const providerIndicator = this.aiProviderStatus.querySelector('.provider-indicator');
             providerIndicator.textContent = '❌ Error loading AI provider info';
         }
+    }
+
+    toggleSafeMode() {
+        this.isSafeModeEnabled = this.safeModeToggle.checked;
+        
+        // Update label text and styling
+        if (this.isSafeModeEnabled) {
+            this.safeModeLabel.textContent = '🛡️ Safe Mode: ON';
+            this.safeModeLabel.classList.add('safe-on');
+        } else {
+            this.safeModeLabel.textContent = '🛡️ Safe Mode: OFF';
+            this.safeModeLabel.classList.remove('safe-on');
+        }
+        
+        console.log('Safe mode:', this.isSafeModeEnabled ? 'ENABLED' : 'DISABLED');
+        
+        // Show a brief notification
+        this.showSafeModeNotification();
+    }
+    
+    showSafeModeNotification() {
+        const notification = document.createElement('div');
+        notification.className = 'safe-mode-notification';
+        notification.textContent = this.isSafeModeEnabled ? 
+            '🛡️ Safe mode enabled - Content filtering active' : 
+            '⚠️ Safe mode disabled - No content filtering';
+        
+        document.body.appendChild(notification);
+        
+        // Auto-remove after 3 seconds
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 3000);
     }
 }
 

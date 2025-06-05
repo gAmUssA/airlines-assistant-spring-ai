@@ -12,7 +12,7 @@ ifneq (,$(wildcard ./.env))
     export
 endif
 
-.PHONY: help build test run run-with-memory run-local run-local-with-memory clean dev-run check format env-check docs ci-local
+.PHONY: help build test run run-with-memory run-local run-local-with-memory clean dev-run check format env-check docs ci-local pull-mistral
 
 help: ## 📋 Show this help message
 	@echo "$(BLUE)🛫 Airline Assistant Spring AI$(NC)"
@@ -100,6 +100,18 @@ setup-env: ## 🔧 Setup environment file template
 	else \
 		echo "$(YELLOW)⚠️  .env.template already exists$(NC)"; \
 	fi
+
+pull-mistral: ## 🤖 Pull Mistral model for local AI
+	@echo "$(BLUE)🤖 Pulling Mistral 7B model for Ollama...$(NC)"
+	@if ! docker compose ps ollama | grep -q "Up"; then \
+		echo "$(YELLOW)🚀 Starting Ollama service first...$(NC)"; \
+		docker compose up -d ollama; \
+		echo "$(YELLOW)⏳ Waiting for Ollama to be ready...$(NC)"; \
+		sleep 10; \
+	fi
+	@echo "$(GREEN)📥 Pulling mistral:7b model...$(NC)"
+	docker compose exec ollama ollama pull mistral:7b
+	@echo "$(GREEN)✅ Mistral model ready for local AI processing$(NC)"
 
 docker-build: ## 🐳 Build Docker image (future enhancement)
 	@echo "$(BLUE)🐳 Docker build...$(NC)"

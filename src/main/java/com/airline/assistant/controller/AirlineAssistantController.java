@@ -3,6 +3,7 @@ package com.airline.assistant.controller;
 import com.airline.assistant.model.User;
 import com.airline.assistant.repository.UserRepository;
 import com.airline.assistant.service.AirlineAssistantService;
+import com.airline.assistant.service.SafeChatService;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,7 @@ public class AirlineAssistantController {
 
   private final AirlineAssistantService assistantService;
   private final UserRepository userRepository;
+  private final SafeChatService safeChatService;
 
   @Value("${airline.assistant.ai-provider:OpenAI (Cloud)}")
   private String aiProvider;
@@ -36,9 +38,10 @@ public class AirlineAssistantController {
   @Value("${airline.assistant.model-name:gpt-4o-mini}")
   private String modelName;
 
-  public AirlineAssistantController(AirlineAssistantService assistantService, UserRepository userRepository) {
+  public AirlineAssistantController(AirlineAssistantService assistantService, UserRepository userRepository, SafeChatService safeChatService) {
     this.assistantService = assistantService;
     this.userRepository = userRepository;
+    this.safeChatService = safeChatService;
   }
 
   /**
@@ -92,6 +95,39 @@ public class AirlineAssistantController {
       String response = assistantService.processMessage(message, conversationId);
       return ResponseEntity.ok(new ChatResponse(response));
 
+    } catch (Exception e) {
+      return ResponseEntity.internalServerError().build();
+    }
+  }
+
+  /**
+   * Safe chat endpoint with content filtering enabled
+   */
+  @PostMapping("/chat/safe")
+  public ResponseEntity<ChatResponse> safeChat(HttpSession httpSession, @RequestBody ChatRequest request) {
+    try {
+      String message = request.message();
+      if (message == null || message.trim().isEmpty()) {
+        return ResponseEntity.badRequest().build();
+      }
+
+      // Get conversation ID from session
+      String conversationId = httpSession.getId();
+      String response = safeChatService.processSafeMessage(message, conversationId);
+      return ResponseEntity.ok(new ChatResponse(response));
+
+    } catch (Exception e) {
+      return ResponseEntity.internalServerError().build();
+    }
+  }
+
+  /**
+   * Get content filter status
+   */
+  @GetMapping("/chat/filter-status")
+  public ResponseEntity<SafeChatService.FilterStatus> getFilterStatus() {
+    try {
+      return ResponseEntity.ok(safeChatService.getFilterStatus());
     } catch (Exception e) {
       return ResponseEntity.internalServerError().build();
     }

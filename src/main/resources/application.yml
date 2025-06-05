@@ -43,3 +43,36 @@ airline:
   assistant:
     ai-provider: "OpenAI (Cloud)"
     model-name: "gpt-4o-mini"
+    safeguard:
+      enabled: true
+      sensitivity-level: "MEDIUM"
+      warning-message: "I need to maintain professional communication standards. Let me help you with your airline travel needs in an appropriate manner."
+      profanity-keywords:
+        - "damn"
+        - "hell"
+        - "crap"
+        - "stupid"
+        - "idiot"
+        - "moron"
+        - "dumb"
+      inappropriate-keywords:
+        - "inappropriate"
+        - "harmful"
+        - "offensive"
+        - "rude"
+        - "disrespectful"
+        - "unprofessional"
+        - "threatening"
+        - "abusive"
+        - "discriminatory"
+      policy-violation-keywords:
+        - "bomb"
+        - "weapon"
+        - "hijack"
+        - "terrorist"
+        - "attack"
+        - "violence"
+        - "illegal"
+        - "drugs"
+        - "smuggle"
+        - "contraband"
