@@ -3,6 +3,7 @@ class AirlineAssistant {
         this.chatMessages = document.getElementById('chatMessages');
         this.messageInput = document.getElementById('messageInput');
         this.sendButton = document.getElementById('sendButton');
+        this.clearChatButton = document.getElementById('clearChatButton');
         this.loadingIndicator = document.getElementById('loadingIndicator');
         this.characterCount = document.querySelector('.character-count');
         
@@ -27,6 +28,9 @@ class AirlineAssistant {
             this.adjustTextareaHeight();
             this.updateCharacterCount();
         });
+        
+        // Clear chat button click
+        this.clearChatButton.addEventListener('click', () => this.clearChat());
         
         // Initial character count
         this.updateCharacterCount();
@@ -80,7 +84,7 @@ class AirlineAssistant {
     }
 
     async callChatAPI(message) {
-        const response = await fetch('/api/chat', {
+        const response = await fetch('/api/v1/chat', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -107,9 +111,26 @@ class AirlineAssistant {
         const messageContent = document.createElement('div');
         messageContent.className = 'message-content';
         
-        const paragraph = document.createElement('p');
-        paragraph.textContent = content;
-        messageContent.appendChild(paragraph);
+        // Create message header with timestamp
+        const messageHeader = document.createElement('div');
+        messageHeader.className = 'message-header';
+        
+        const timestamp = document.createElement('span');
+        timestamp.className = 'message-timestamp';
+        timestamp.textContent = this.formatTimestamp(new Date());
+        messageHeader.appendChild(timestamp);
+        messageContent.appendChild(messageHeader);
+        
+        // Check if we're adding an assistant message (might contain formatted HTML for lists)
+        if (type === 'assistant') {
+            // Handle potentially HTML-formatted lists by using innerHTML
+            messageContent.innerHTML += `<p>${content}</p>`;
+        } else {
+            // For user messages, use textContent as before
+            const paragraph = document.createElement('p');
+            paragraph.textContent = content;
+            messageContent.appendChild(paragraph);
+        }
         
         messageDiv.appendChild(avatar);
         messageDiv.appendChild(messageContent);
@@ -131,6 +152,74 @@ class AirlineAssistant {
         } else {
             this.loadingIndicator.classList.add('hidden');
         }
+    }
+
+    // Format timestamp to a readable string
+    formatTimestamp(date) {
+        const now = new Date();
+        const diffMs = now - date;
+        const diffSec = Math.round(diffMs / 1000);
+        const diffMin = Math.round(diffSec / 60);
+        const diffHour = Math.round(diffMin / 60);
+        
+        // If less than a minute ago
+        if (diffSec < 60) {
+            return 'Just now';
+        }
+        // If less than an hour ago
+        else if (diffMin < 60) {
+            return `${diffMin} ${diffMin === 1 ? 'minute' : 'minutes'} ago`;
+        }
+        // If less than a day ago
+        else if (diffHour < 24) {
+            return `${diffHour} ${diffHour === 1 ? 'hour' : 'hours'} ago`;
+        }
+        // Otherwise show the date
+        else {
+            return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' ' + 
+                   date.toLocaleDateString();
+        }
+    }
+    
+    // Clear chat history/memory and UI
+    async clearChat() {
+        try {
+            this.setLoading(true);
+            
+            // Call the API to clear memory
+            const response = await fetch('/api/v1/chat/memory', {
+                method: 'DELETE',
+                credentials: 'include'
+            });
+            
+            if (response.ok) {
+                // Clear UI
+                const initialMessage = this.chatMessages.firstElementChild;
+                this.chatMessages.innerHTML = '';
+                if (initialMessage) {
+                    this.chatMessages.appendChild(initialMessage);
+                }
+                
+                // Add confirmation message
+                this.addMessage('Chat history has been cleared. How else can I assist you?', 'assistant');
+            } else {
+                console.error('Failed to clear chat memory');
+                this.addMessage('Sorry, I was unable to clear the chat history. Please try again.', 'assistant');
+            }
+        } catch (error) {
+            console.error('Error clearing chat memory:', error);
+            this.addMessage('Sorry, I encountered an error while clearing the chat history.', 'assistant');
+        } finally {
+            this.setLoading(false);
+        }
+    }
+    
+    // Method to interact with memory API
+    clearChatMemory() {
+        return fetch('/api/v1/chat/memory', {
+            method: 'DELETE',
+            credentials: 'include'
+        });
     }
 }
 

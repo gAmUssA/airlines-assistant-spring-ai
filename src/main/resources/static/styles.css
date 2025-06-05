@@ -155,6 +155,26 @@ body {
     word-wrap: break-word;
 }
 
+.message-header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 5px;
+}
+
+.message-timestamp {
+    font-size: 0.7rem;
+    color: #999;
+    font-style: italic;
+}
+
+.user-message .message-header {
+    justify-content: flex-start;
+}
+
+.user-message .message-timestamp {
+    color: rgba(255, 255, 255, 0.8);
+}
+
 .assistant-message .message-content {
     background: #f8f9fa;
     border-bottom-left-radius: 6px;
@@ -239,13 +259,48 @@ body {
 
 .input-footer {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
+    align-items: center;
     margin-top: 8px;
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
 }
 
 .character-count {
     font-size: 0.8rem;
     color: #999;
+}
+
+.secondary-button {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 15px;
+    border: 1px solid #ddd;
+    background: transparent;
+    color: #666;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.secondary-button:hover {
+    background-color: rgba(102, 126, 234, 0.1);
+    border-color: #667eea;
+    color: #667eea;
+}
+
+.secondary-button svg {
+    color: #999;
+    transition: color 0.2s ease;
+}
+
+.secondary-button:hover svg {
+    color: #667eea;
 }
 
 /* Loading indicator */
@@ -290,6 +345,45 @@ body {
     padding: 20px;
     color: rgba(255, 255, 255, 0.8);
     font-size: 0.9rem;
+}
+
+/* List styling for AI responses */
+.ai-list-container {
+    margin: 10px 0;
+}
+
+.ai-ordered-list {
+    counter-reset: ai-list-counter;
+    margin-left: 10px;
+}
+
+.ai-unordered-list {
+    margin-left: 10px;
+}
+
+.ai-list-item {
+    position: relative;
+    padding-left: 26px;
+    margin-bottom: 8px;
+    line-height: 1.5;
+}
+
+.ai-ordered-list .ai-list-item::before {
+    content: counter(ai-list-counter) ".";
+    counter-increment: ai-list-counter;
+    position: absolute;
+    left: 0;
+    color: #764ba2;
+    font-weight: 600;
+}
+
+.ai-unordered-list .ai-list-item::before {
+    content: "•";
+    position: absolute;
+    left: 10px;
+    color: #764ba2;
+    font-weight: 600;
+    font-size: 1.2em;
 }
 
 /* Responsive design */

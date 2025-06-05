@@ -1,6 +1,10 @@
 package com.airline.assistant.config;
 
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
+import org.springframework.ai.chat.memory.ChatMemory;
+import org.springframework.ai.chat.memory.ChatMemoryRepository;
+import org.springframework.ai.chat.memory.MessageWindowChatMemory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -8,12 +12,26 @@ import org.springframework.context.annotation.Configuration;
 public class AirlineAssistantConfig {
 
     @Bean
-    public ChatClient chatClient(ChatClient.Builder chatClientBuilder) {
+    public ChatMemory chatMemory(ChatMemoryRepository chatMemoryRepository) {
+        // Customize MessageWindowChatMemory to use a window of 50 messages (Task 3.10)
+        return MessageWindowChatMemory.builder()
+                .chatMemoryRepository(chatMemoryRepository) // Uses auto-configured InMemoryChatMemoryRepository by default
+                .maxMessages(50)
+                .build();
+    }
+
+    @Bean
+    public ChatClient chatClient(ChatClient.Builder chatClientBuilder, ChatMemory chatMemory) { // Inject auto-configured ChatMemory
         return chatClientBuilder
                 .defaultSystem("You are a helpful airline loyalty program assistant. " +
                         "You help travelers understand and maximize their benefits with " +
                         "airline loyalty programs, particularly Delta SkyMiles and United MileagePlus. " +
-                        "Provide accurate, helpful, and friendly responses.")
+                        "Provide accurate, helpful, and friendly responses. " +
+                        "Remember our conversation history to provide contextual responses.")
+                .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory)
+                        .conversationId(ChatMemory.DEFAULT_CONVERSATION_ID)
+                        // .withLastK(50) // lastK is configured on MessageWindowChatMemory, not advisor builder
+                        .build())
                 .build();
     }
 }
