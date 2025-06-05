@@ -169,4 +169,19 @@
 **Implications**: Project is ready to proceed with Phase 3 RAG implementation
 **Next Steps**: Await user decision on Phase 3 implementation or other tasks
 
+## Recent Decisions
+
+[2025-06-05 04:52:00] - **Phase 4 Tool Integration Implementation**
+- **Decision**: Implemented Spring AI @Tool annotation framework for function calling
+- **Rationale**: Spring AI provides automatic tool discovery and execution without manual function registration
+- **Implementation**: 
+  - Created AirlineTools component with 5 @Tool annotated methods
+  - Fixed ChatClient configuration to use defaultTools() instead of defaultFunctions()
+  - Added realistic simulation with delays and occasional failures
+- **Impact**: Enables AI assistant to perform actions like SMS notifications, flight lookups, and loyalty calculations
+- **Alternatives Considered**: Manual function registration vs automatic discovery (chose automatic for simplicity)
+- **Status**: Committed to git (commit a222bfb) - Phase 4 50% complete
+
+[2025-06-05 04:35:32] - **Memory Bank System Implementation**
+
 [2025-06-05 00:54:05] - Initial decision log established based on project requirements

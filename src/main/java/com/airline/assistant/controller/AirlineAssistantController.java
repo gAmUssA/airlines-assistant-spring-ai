@@ -1,17 +1,23 @@
 package com.airline.assistant.controller;
 
+import com.airline.assistant.model.User;
+import com.airline.assistant.repository.UserRepository;
 import com.airline.assistant.service.AirlineAssistantService;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -21,9 +27,11 @@ import jakarta.servlet.http.HttpSession;
 public class AirlineAssistantController {
 
   private final AirlineAssistantService assistantService;
+  private final UserRepository userRepository;
 
-  public AirlineAssistantController(AirlineAssistantService assistantService) {
+  public AirlineAssistantController(AirlineAssistantService assistantService, UserRepository userRepository) {
     this.assistantService = assistantService;
+    this.userRepository = userRepository;
   }
 
   /**
@@ -35,6 +43,26 @@ public class AirlineAssistantController {
 
   public record ChatResponse(String response) {
 
+  }
+
+  public record UserProfileResponse(
+      String username,
+      String lastName,
+      String loyaltyNumber,
+      String loyaltyStatus,
+      String preferredAirport,
+      String airline
+  ) {
+    public static UserProfileResponse from(User user) {
+      return new UserProfileResponse(
+          user.getUsername(),
+          user.getLastName(),
+          user.getLoyaltyNumber(),
+          user.getLoyaltyStatus(),
+          user.getPreferredAirport(),
+          user.getAirline()
+      );
+    }
   }
 
   /**
@@ -53,6 +81,46 @@ public class AirlineAssistantController {
       String response = assistantService.processMessage(message, conversationId);
       return ResponseEntity.ok(new ChatResponse(response));
 
+    } catch (Exception e) {
+      return ResponseEntity.internalServerError().build();
+    }
+  }
+
+  /**
+   * Search for users by username (for user recognition)
+   */
+  @GetMapping("/users/search")
+  public ResponseEntity<List<UserProfileResponse>> searchUsers(@RequestParam String query) {
+    try {
+      // Simple search by username containing the query (case-insensitive)
+      List<User> users = userRepository.findAll().stream()
+          .filter(user -> user.getUsername().toLowerCase().contains(query.toLowerCase()) ||
+                         (user.getLastName() != null && user.getLastName().toLowerCase().contains(query.toLowerCase())))
+          .limit(5) // Limit to 5 results
+          .toList();
+      
+      List<UserProfileResponse> response = users.stream()
+          .map(UserProfileResponse::from)
+          .toList();
+      
+      return ResponseEntity.ok(response);
+    } catch (Exception e) {
+      return ResponseEntity.internalServerError().build();
+    }
+  }
+
+  /**
+   * Get user profile by username
+   */
+  @GetMapping("/users/{username}")
+  public ResponseEntity<UserProfileResponse> getUserProfile(@PathVariable String username) {
+    try {
+      Optional<User> user = userRepository.findByUsername(username);
+      if (user.isPresent()) {
+        return ResponseEntity.ok(UserProfileResponse.from(user.get()));
+      } else {
+        return ResponseEntity.notFound().build();
+      }
     } catch (Exception e) {
       return ResponseEntity.internalServerError().build();
     }

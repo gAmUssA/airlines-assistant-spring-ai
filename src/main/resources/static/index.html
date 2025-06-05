@@ -10,63 +10,88 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <header class="header">
-            <div class="logo">
-                <div class="logo-icon">✈️</div>
-                <h1>Airline Loyalty Assistant</h1>
+    <div class="app-container">
+        <!-- User Profile Sidebar -->
+        <aside class="user-profile-sidebar" id="userProfileSidebar">
+            <div class="profile-header">
+                <div class="profile-icon">👤</div>
+                <h3>User Profile</h3>
+                <button class="close-profile" id="closeProfileBtn">×</button>
             </div>
-            <p class="subtitle">Your AI-powered guide to maximizing airline loyalty benefits</p>
-            <div class="nav-links">
-                <a href="rag-tester.html" class="nav-link">RAG Tester →</a>
+            
+            <div class="profile-search">
+                <input type="text" id="userSearchInput" placeholder="Search for user..." />
+                <div class="search-results" id="searchResults"></div>
             </div>
-        </header>
+            
+            <div class="profile-content" id="profileContent">
+                <div class="profile-placeholder">
+                    <p>🔍 Search for a user above to view their loyalty profile</p>
+                </div>
+            </div>
+        </aside>
 
-        <main class="chat-container">
-            <div class="chat-messages" id="chatMessages">
-                <div class="message assistant-message">
-                    <div class="message-avatar">🤖</div>
-                    <div class="message-content">
-                        <div class="message-header">
-                            <span class="message-timestamp">Just now</span>
+        <div class="container">
+            <header class="header">
+                <div class="logo">
+                    <div class="logo-icon">✈️</div>
+                    <h1>Airline Loyalty Assistant</h1>
+                </div>
+                <p class="subtitle">Your AI-powered guide to maximizing airline loyalty benefits</p>
+                <div class="nav-links">
+                    <button class="nav-link profile-toggle" id="profileToggleBtn">
+                        👤 User Profile
+                    </button>
+                    <a href="rag-tester.html" class="nav-link">RAG Tester →</a>
+                </div>
+            </header>
+
+            <main class="chat-container">
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message assistant-message">
+                        <div class="message-avatar">🤖</div>
+                        <div class="message-content">
+                            <div class="message-header">
+                                <span class="message-timestamp">Just now</span>
+                            </div>
+                            <p>Hello! I'm your airline loyalty assistant. I can help you with questions about Delta SkyMiles, United MileagePlus, and other loyalty programs. What would you like to know?</p>
                         </div>
-                        <p>Hello! I'm your airline loyalty assistant. I can help you with questions about Delta SkyMiles, United MileagePlus, and other loyalty programs. What would you like to know?</p>
                     </div>
                 </div>
-            </div>
 
-            <div class="chat-input-container">
-                <div class="input-wrapper">
-                    <textarea 
-                        id="messageInput" 
-                        placeholder="Ask me about airline loyalty programs..."
-                        rows="1"
-                        maxlength="1000"></textarea>
-                    <button id="sendButton" type="button" aria-label="Send message">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="22" y1="2" x2="11" y2="13"></line>
-                            <polygon points="22,2 15,22 11,13 2,9"></polygon>
-                        </svg>
-                    </button>
-                </div>
-                <div class="input-footer">
-                    <div class="actions">
-                        <button id="clearChatButton" type="button" class="secondary-button">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="3 6 5 6 21 6"></polyline>
-                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                <div class="chat-input-container">
+                    <div class="input-wrapper">
+                        <textarea 
+                            id="messageInput" 
+                            placeholder="Ask me about airline loyalty programs..."
+                            rows="1"
+                            maxlength="1000"></textarea>
+                        <button id="sendButton" type="button" aria-label="Send message">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="22" y1="2" x2="11" y2="13"></line>
+                                <polygon points="22,2 15,22 11,13 2,9"></polygon>
                             </svg>
-                            Clear Chat
                         </button>
                     </div>
-                    <span class="character-count">0/1000</span>
+                    <div class="input-footer">
+                        <div class="actions">
+                            <button id="clearChatButton" type="button" class="secondary-button">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                </svg>
+                                Clear Chat
+                            </button>
+                        </div>
+                        <span class="character-count">0/1000</span>
+                    </div>
                 </div>
-            </div>
-        </main>
+            </main>
 
-        <footer class="footer">
-            <p>Powered by Spring AI • Demo Application</p>
-        </footer>
+            <footer class="footer">
+                <p>Powered by Spring AI • Demo Application</p>
+            </footer>
+        </div>
     </div>
 
     <div id="loadingIndicator" class="loading-indicator hidden">

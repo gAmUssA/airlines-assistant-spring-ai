@@ -7,6 +7,15 @@ class AirlineAssistant {
         this.loadingIndicator = document.getElementById('loadingIndicator');
         this.characterCount = document.querySelector('.character-count');
         
+        // User profile elements
+        this.profileSidebar = document.getElementById('userProfileSidebar');
+        this.profileToggleBtn = document.getElementById('profileToggleBtn');
+        this.closeProfileBtn = document.getElementById('closeProfileBtn');
+        this.userSearchInput = document.getElementById('userSearchInput');
+        this.searchResults = document.getElementById('searchResults');
+        this.profileContent = document.getElementById('profileContent');
+        this.container = document.querySelector('.container');
+        
         this.initializeEventListeners();
         this.adjustTextareaHeight();
     }
@@ -31,6 +40,13 @@ class AirlineAssistant {
         
         // Clear chat button click
         this.clearChatButton.addEventListener('click', () => this.clearChat());
+        
+        // Profile sidebar toggle
+        this.profileToggleBtn.addEventListener('click', () => this.toggleProfileSidebar());
+        this.closeProfileBtn.addEventListener('click', () => this.closeProfileSidebar());
+        
+        // User search functionality
+        this.userSearchInput.addEventListener('input', (e) => this.searchUsers(e.target.value));
         
         // Initial character count
         this.updateCharacterCount();
@@ -220,6 +236,140 @@ class AirlineAssistant {
             method: 'DELETE',
             credentials: 'include'
         });
+    }
+
+    toggleProfileSidebar() {
+        this.profileSidebar.classList.toggle('open');
+        this.container.classList.toggle('sidebar-open');
+    }
+
+    closeProfileSidebar() {
+        this.profileSidebar.classList.remove('open');
+        this.container.classList.remove('sidebar-open');
+    }
+
+    async searchUsers(query) {
+        if (!query || query.trim().length < 2) {
+            this.searchResults.innerHTML = '';
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/v1/users/search?query=${encodeURIComponent(query.trim())}`);
+            if (response.ok) {
+                const users = await response.json();
+                this.displaySearchResults(users);
+            } else {
+                console.error('Failed to search users');
+                this.searchResults.innerHTML = '<div class="search-error">Failed to search users</div>';
+            }
+        } catch (error) {
+            console.error('Error searching users:', error);
+            this.searchResults.innerHTML = '<div class="search-error">Error searching users</div>';
+        }
+    }
+
+    displaySearchResults(users) {
+        if (users.length === 0) {
+            this.searchResults.innerHTML = '<div class="search-no-results">No users found</div>';
+            return;
+        }
+
+        const resultsHtml = users.map(user => `
+            <div class="search-result-item" data-username="${user.username}">
+                <div class="search-result-name">${user.lastName || user.username}</div>
+                <div class="search-result-details">@${user.username} • ${user.loyaltyStatus} • ${user.airline}</div>
+            </div>
+        `).join('');
+
+        this.searchResults.innerHTML = resultsHtml;
+        
+        // Add click event listeners to search results
+        this.searchResults.querySelectorAll('.search-result-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const username = item.getAttribute('data-username');
+                this.loadUserProfile(username);
+            });
+        });
+    }
+
+    async loadUserProfile(username) {
+        console.log('Loading user profile for:', username);
+        try {
+            const response = await fetch(`/api/v1/users/${encodeURIComponent(username)}`);
+            console.log('Profile API response status:', response.status);
+            if (response.ok) {
+                const userProfile = await response.json();
+                console.log('User profile data:', userProfile);
+                this.displayUserProfile(userProfile);
+                this.searchResults.innerHTML = '';
+                this.userSearchInput.value = '';
+            } else {
+                console.error('Failed to load user profile');
+                this.profileContent.innerHTML = '<div class="profile-error">Failed to load user profile</div>';
+            }
+        } catch (error) {
+            console.error('Error loading user profile:', error);
+            this.profileContent.innerHTML = '<div class="profile-error">Error loading user profile</div>';
+        }
+    }
+
+    displayUserProfile(user) {
+        const loyaltyStatusClass = user.loyaltyStatus.toLowerCase().replace(/\s+/g, '-');
+        const displayName = user.lastName || user.username;
+        const initials = user.lastName ? user.lastName.substring(0, 2).toUpperCase() : user.username.substring(0, 2).toUpperCase();
+        
+        const profileHtml = `
+            <div class="user-profile-card">
+                <div class="profile-card-header">
+                    <div class="profile-avatar">${initials}</div>
+                    <div class="profile-card-info">
+                        <h4>${displayName}</h4>
+                        <div class="username">@${user.username}</div>
+                    </div>
+                </div>
+                
+                <div class="profile-details">
+                    <div class="profile-field">
+                        <div class="profile-field-label">Loyalty Status</div>
+                        <div class="profile-field-value">
+                            <span class="loyalty-status ${loyaltyStatusClass}">
+                                ${this.getLoyaltyIcon(user.loyaltyStatus)} ${user.loyaltyStatus}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="profile-field">
+                        <div class="profile-field-label">Loyalty Number</div>
+                        <div class="profile-field-value">${user.loyaltyNumber}</div>
+                    </div>
+                    
+                    <div class="profile-field">
+                        <div class="profile-field-label">Airline</div>
+                        <div class="profile-field-value">${user.airline}</div>
+                    </div>
+                    
+                    <div class="profile-field">
+                        <div class="profile-field-label">Home Airport</div>
+                        <div class="profile-field-value">${user.preferredAirport}</div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        this.profileContent.innerHTML = profileHtml;
+    }
+
+    getLoyaltyIcon(status) {
+        const icons = {
+            'Gold': '🥇',
+            'Silver': '🥈',
+            'Platinum': '💎',
+            'Diamond': '💎',
+            'Basic': '🎫',
+            'Bronze': '🥉'
+        };
+        return icons[status] || '🎫';
     }
 }
 
