@@ -171,6 +171,22 @@
 
 ## Recent Decisions
 
+[2025-06-05 06:05:42] - **Phase 5 Local Model Support Implementation**
+- **Decision**: Implemented complete Ollama integration with profile-based switching between OpenAI and local models
+- **Rationale**: Provides offline capability and privacy benefits while maintaining cloud option for performance
+- **Implementation**:
+  - Added Ollama Spring AI dependency and Docker Compose service
+  - Created application-local.yml for Ollama profile configuration
+  - Used auto-configuration exclusions to prevent bean conflicts
+  - Single ChatClient bean with environment-aware system messages
+  - Frontend AI provider status indicator with dynamic styling
+  - REST API endpoint for AI provider information
+  - Makefile commands for easy profile switching
+- **Impact**: Users can seamlessly switch between cloud (OpenAI) and local (Ollama) AI models
+- **Alternatives Considered**: Multiple ChatClient beans vs single bean with conditional logic (chose single for simplicity)
+- **Technical Solutions**: Auto-configuration exclusions resolved bean conflicts elegantly
+- **Status**: 100% complete - Both profiles tested and working perfectly
+
 [2025-06-05 04:52:00] - **Phase 4 Tool Integration Implementation**
 - **Decision**: Implemented Spring AI @Tool annotation framework for function calling
 - **Rationale**: Spring AI provides automatic tool discovery and execution without manual function registration

@@ -4,6 +4,7 @@ import com.airline.assistant.model.User;
 import com.airline.assistant.repository.UserRepository;
 import com.airline.assistant.service.AirlineAssistantService;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,6 +30,12 @@ public class AirlineAssistantController {
   private final AirlineAssistantService assistantService;
   private final UserRepository userRepository;
 
+  @Value("${airline.assistant.ai-provider:OpenAI (Cloud)}")
+  private String aiProvider;
+
+  @Value("${airline.assistant.model-name:gpt-4o-mini}")
+  private String modelName;
+
   public AirlineAssistantController(AirlineAssistantService assistantService, UserRepository userRepository) {
     this.assistantService = assistantService;
     this.userRepository = userRepository;
@@ -42,6 +49,10 @@ public class AirlineAssistantController {
   }
 
   public record ChatResponse(String response) {
+
+  }
+
+  public record AiProviderResponse(String provider, String model) {
 
   }
 
@@ -124,6 +135,14 @@ public class AirlineAssistantController {
     } catch (Exception e) {
       return ResponseEntity.internalServerError().build();
     }
+  }
+
+  /**
+   * Endpoint to get AI provider information
+   */
+  @GetMapping("/ai-provider")
+  public ResponseEntity<AiProviderResponse> getAiProvider() {
+    return ResponseEntity.ok(new AiProviderResponse(aiProvider, modelName));
   }
 
   /**

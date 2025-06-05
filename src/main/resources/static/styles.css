@@ -315,6 +315,38 @@ body {
     font-weight: 400;
 }
 
+/* AI Provider Status */
+.ai-provider-status {
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.provider-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: rgba(102, 126, 234, 0.1);
+    border: 1px solid rgba(102, 126, 234, 0.2);
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #667eea;
+    transition: all 0.3s ease;
+}
+
+.provider-indicator.openai {
+    background: rgba(16, 163, 127, 0.1);
+    border-color: rgba(16, 163, 127, 0.2);
+    color: #10a37f;
+}
+
+.provider-indicator.ollama {
+    background: rgba(255, 140, 0, 0.1);
+    border-color: rgba(255, 140, 0, 0.2);
+    color: #ff8c00;
+}
+
 /* Navigation links */
 .nav-links {
     margin-top: 15px;

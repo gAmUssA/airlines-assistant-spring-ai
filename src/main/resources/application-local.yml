@@ -1,10 +1,6 @@
 spring:
   application:
     name: airlines-assistant-spring-ai
-  autoconfigure:
-    exclude:
-      - org.springframework.ai.model.ollama.autoconfigure.OllamaChatAutoConfiguration
-      - org.springframework.ai.model.ollama.autoconfigure.OllamaEmbeddingAutoConfiguration
   datasource:
     url: jdbc:postgresql://localhost:5432/airline_assistant
     username: postgres
@@ -18,17 +14,21 @@ spring:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
+  autoconfigure:
+    exclude:
+      - org.springframework.ai.model.openai.autoconfigure.OpenAiChatAutoConfiguration
+      - org.springframework.ai.model.openai.autoconfigure.OpenAiEmbeddingAutoConfiguration
   ai:
-    openai:
-      api-key: ${OPENAI_API_KEY:your-api-key-here}
+    ollama:
+      base-url: http://localhost:11434
       chat:
         options:
-          model: gpt-4o-mini
+          model: mistral:7b
           temperature: 0.7
           max-tokens: 1000
       embedding:
         options:
-          model: text-embedding-3-small
+          model: nomic-embed-text
 
 server:
   port: 9080
@@ -37,9 +37,10 @@ logging:
   level:
     com.airline.assistant: DEBUG
     org.springframework.ai: DEBUG
+    org.springframework.ai.ollama: TRACE
 
 # Profile indicator
 airline:
   assistant:
-    ai-provider: "OpenAI (Cloud)"
-    model-name: "gpt-4o-mini"
+    ai-provider: "Ollama (Local)"
+    model-name: "mistral:7b"

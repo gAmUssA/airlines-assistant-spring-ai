@@ -6,6 +6,7 @@ class AirlineAssistant {
         this.clearChatButton = document.getElementById('clearChatButton');
         this.loadingIndicator = document.getElementById('loadingIndicator');
         this.characterCount = document.querySelector('.character-count');
+        this.aiProviderStatus = document.getElementById('aiProviderStatus');
         
         // User profile elements
         this.profileSidebar = document.getElementById('userProfileSidebar');
@@ -18,6 +19,7 @@ class AirlineAssistant {
         
         this.initializeEventListeners();
         this.adjustTextareaHeight();
+        this.loadAiProviderInfo();
     }
 
     initializeEventListeners() {
@@ -370,6 +372,39 @@ class AirlineAssistant {
             'Bronze': '🥉'
         };
         return icons[status] || '🎫';
+    }
+
+    async loadAiProviderInfo() {
+        try {
+            const response = await fetch('/api/v1/ai-provider');
+            if (response.ok) {
+                const data = await response.json();
+                const providerIndicator = this.aiProviderStatus.querySelector('.provider-indicator');
+                
+                // Determine icon and class based on provider
+                let icon = '🤖';
+                let cssClass = '';
+                
+                if (data.provider.toLowerCase().includes('openai')) {
+                    icon = '☁️';
+                    cssClass = 'openai';
+                } else if (data.provider.toLowerCase().includes('ollama')) {
+                    icon = '🏠';
+                    cssClass = 'ollama';
+                }
+                
+                providerIndicator.textContent = `${icon} ${data.provider} - ${data.model}`;
+                providerIndicator.className = `provider-indicator ${cssClass}`;
+            } else {
+                console.error('Failed to load AI provider info');
+                const providerIndicator = this.aiProviderStatus.querySelector('.provider-indicator');
+                providerIndicator.textContent = '❌ Failed to load AI provider info';
+            }
+        } catch (error) {
+            console.error('Error loading AI provider info:', error);
+            const providerIndicator = this.aiProviderStatus.querySelector('.provider-indicator');
+            providerIndicator.textContent = '❌ Error loading AI provider info';
+        }
     }
 }
 

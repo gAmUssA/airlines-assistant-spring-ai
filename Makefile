@@ -12,12 +12,12 @@ ifneq (,$(wildcard ./.env))
     export
 endif
 
-.PHONY: help build test run run-with-memory clean dev-run check format env-check docs ci-local
+.PHONY: help build test run run-with-memory run-local run-local-with-memory clean dev-run check format env-check docs ci-local
 
 help: ## 📋 Show this help message
 	@echo "$(BLUE)🛫 Airline Assistant Spring AI$(NC)"
 	@echo "$(YELLOW)Available commands:$(NC)"
-	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  $(GREEN)%-15s$(NC) %s\n", $$1, $$2}' $(MAKEFILE_LIST)
+	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  $(GREEN)%-20s$(NC) %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
 env-check: ## 🔍 Check environment setup
 	@echo "$(BLUE)🔍 Checking environment setup...$(NC)"
@@ -59,6 +59,17 @@ run-with-memory: env-check ## 🚀 Run the application with increased memory set
 	fi
 	@echo "$(YELLOW)💡 Using JVM options: -Xmx512m -Xms256m$(NC)"
 	JAVA_OPTS="-Xmx512m -Xms256m" ./gradlew bootRun
+
+run-local: env-check ## 🚀 Run the application with local profile (Ollama)
+	@echo "$(BLUE)🚀 Starting application with local profile (Ollama) on port 9080...$(NC)"
+	@echo "$(YELLOW)🏠 Using Ollama for local AI processing$(NC)"
+	./gradlew bootRun --args='--spring.profiles.active=local'
+
+run-local-with-memory: env-check ## 🚀 Run the application with local profile and increased memory settings
+	@echo "$(BLUE)🚀 Starting application with local profile (Ollama) and increased memory settings on port 9080...$(NC)"
+	@echo "$(YELLOW)🏠 Using Ollama for local AI processing$(NC)"
+	@echo "$(YELLOW)💡 Using JVM options: -Xmx512m -Xms256m$(NC)"
+	JAVA_OPTS="-Xmx512m -Xms256m" ./gradlew bootRun --args='--spring.profiles.active=local'
 
 dev-run: env-check ## 🔧 Run in development mode with hot reload
 	@echo "$(BLUE)🔧 Starting in development mode on port 9080...$(NC)"
