@@ -1,11 +1,13 @@
 package com.airline.assistant.service;
 
+import com.airline.assistant.util.UserIntroductionDetector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,11 +22,14 @@ public class AirlineAssistantService {
   private final ChatClient chatClient;
   private final ChatMemory chatMemory;
   private final KnowledgeBaseService knowledgeBaseService;
+  private final UserService userService;
 
-  public AirlineAssistantService(ChatClient chatClient, ChatMemory chatMemory, KnowledgeBaseService knowledgeBaseService) {
+  public AirlineAssistantService(ChatClient chatClient, ChatMemory chatMemory, 
+                                KnowledgeBaseService knowledgeBaseService, UserService userService) {
     this.chatClient = chatClient;
     this.chatMemory = chatMemory;
     this.knowledgeBaseService = knowledgeBaseService;
+    this.userService = userService;
   }
 
   public String processMessage(String userMessage, String conversationId) {
@@ -37,11 +42,36 @@ public class AirlineAssistantService {
       String relevantContext = knowledgeBaseService.getRelevantContext(userMessage);
       LOGGER.debug("Retrieved relevant context: {}", relevantContext);
 
-      // Construct prompt with relevant context
+      // Check if the message contains a user introduction
+      Optional<String> usernameOpt = UserIntroductionDetector.detectUsername(userMessage);
+
+      // Get user information if a username was detected
+      String userInfo = "";
+      if (usernameOpt.isPresent()) {
+          String username = usernameOpt.get();
+          LOGGER.debug("Detected user introduction with username: {}", username);
+          userInfo = userService.getUserInfoForPrompt(username);
+      }
+
+      // Construct prompt with relevant context and user information
       String enhancedPrompt = userMessage;
-      if (!relevantContext.isEmpty()) {
-        enhancedPrompt = relevantContext + "\n\nUser question: " + userMessage;
-        LOGGER.debug("Enhanced prompt with context: {}", enhancedPrompt);
+
+      // Add context and user information to the prompt if available
+      if (!relevantContext.isEmpty() || !userInfo.isEmpty()) {
+          StringBuilder promptBuilder = new StringBuilder();
+
+          if (!userInfo.isEmpty()) {
+              promptBuilder.append(userInfo).append("\n\n");
+              LOGGER.debug("Added user information to prompt: {}", userInfo);
+          }
+
+          if (!relevantContext.isEmpty()) {
+              promptBuilder.append(relevantContext).append("\n\n");
+          }
+
+          promptBuilder.append("User question: ").append(userMessage);
+          enhancedPrompt = promptBuilder.toString();
+          LOGGER.debug("Enhanced prompt with context and user info: {}", enhancedPrompt);
       }
 
       String response = chatClient

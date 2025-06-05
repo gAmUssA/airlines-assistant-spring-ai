@@ -1,6 +1,19 @@
 spring:
   application:
     name: airlines-assistant-spring-ai
+  datasource:
+    url: jdbc:postgresql://localhost:5432/airline_assistant
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
   ai:
     openai:
       api-key: ${OPENAI_API_KEY:your-api-key-here}
